@@ -157,25 +157,78 @@ proyectar el impacto epidemiol\'ogico de la vacunaci\'on antigripal. Nosotros re
 al sistema en los distintos instantes de tiempo $t \in [1,52] $
 \label{sec:intro}
 
+\section{Resultados fundamentales}
 \subsection{Estructura del trabajo}
-El art\'iculo esta estructurado de la siguiente manera: en primer lugar se tiene un resumen de dicho art\'iculo, procede una introducci\'on donde se expone la problem\'atica 
-a analizar. Luego viene la secci\'on Material y M\'etodos en la cual se muestran los datos que se tienen sobre el problema y los m\'etodos que se utlizaron en la resoluci\'on 
-del mismo. Vendr\'ia despu\'es la secci\'on de los Resultados donde, valga la redundancia, se exponen los resultados de utilizar los m\'etodos para resolver el problema, esto 
-es relevado por la secci\'on de la Discusi\'on, donde se analizan dichos resultados y se sacan conclusiones. Por \'ultimo est\'a la bibliograf\'ia.
+Dado que el objetivo de el paper analizdo es presentar de forma guiada la
+construcción de un modelo dinámico, cuyo funcionamiento y resultados se ilustrarán mediante una aplicación a la evaluación
+económica de la vacunación antigripal en España, en este art\'iculo simularemos los pasos
+mostrados para analizar el comportamiento de una hip\'otetica epidemia gripal,
+para ello dividiremos la poblacio\'on en las siguientes categor\'ias:
+susceptibles(Aquellos individuos que están en condiciones de ser contagiados),
+infectivos (aquellos que infectan o pueden
+infectar a los susceptibles) y por último los resistentes (los que presentan
+resistencia al agente infeccioso al recuperarse de la enfermedad ya sea por inmunización natural
+o al quedar inmunizados por la vacuna).
+\\
+Basados en esto se plantea el siguiente sistema no lineal de ecuaciones diferenciales ordinarias
 
-\section{Resultados fundamentales.}
 \begin{equation}
 \hspace{-7em}
 \begin{aligned}
 \left\{
 \begin{array}{l}
-S'(x) = -\beta*I(t)*S(t)-V(t) \\
-R'(x) = -\beta*I(t)*S(t)- \gamma*I(t); \ siendo \ N = S(t)+I(t)+R(t)\\
-I'(x) = \gamma*I(t)+ V(t)
+S'(t) = -\beta*I(t)*S(t)-V(t) \\
+R'(t) = -\beta*I(t)*S(t)- \gamma*I(t); \ siendo \ N = S(t)+I(t)+R(t)\\
+I'(t) = \gamma*I(t)+ V(t)
 \end{array}
 \right.
 \end{aligned}
 \end{equation}
+
+Donde N es el tamaño de la población considerada, en este caso N =100'000,
+S(t),I(t) y R(t) representan el número de susceptibles, infectivos y resistentes en cada instante de tiempo t.
+$\beta$ es el coeficiente de transmisión  y $\gamma$ el coeficiente de retiro natural el cual 
+es un indicador del ritmo con el cual los contagiados dejan de ser infectivos, además de esto
+se tienen las derivadas de primer orden respecto a t S'(t), R'(t) e I'(t)
+Para resolver este sistema es necesario los valores iniciales de cada una de 
+las categorias en las cuales se dividió la población inicialmente además de los valores de los coeficientes
+de retiro y de transmisión, en este caso se toman valores que concuerden con datos ya observados
+como lo son el coeficiente de retiro natural $\gamma = 3.47$ y el coeficiente de transmisión
+$\beta = \frac{\gamma}{96'015} = \frac{3,47}{96'015}$ donde 96'015 es el número
+de susceptibles en el auge de la onda epidémica, que se ha obtenido reduciendo proporcionalmente
+la cifra en la población española para ajustar el comportamiento
+del modelo a un colectivo de 100'000 individuos. Se ha escogido
+este tamaño poblacional (N) por ser un valor empleado con
+frecuencia en las fuentes de información epidemiológica, y
+además porque facilita la interpretación y el cálculo de los
+indicadores económicos del estudio.\\
+Según la distribución por clases de la población en la primera
+semana del período epidemiólgico estudiado (semana 0), los
+valores iniciales para la resolución del sistema de ecuaciones
+diferenciales son los siguientes:
+
+\begin{equation}
+\hspace{-14cm}
+\begin{aligned}
+\left\{
+\begin{array}{l}
+S(0) = 99986 \\
+R(0) = 14 \\
+I(0) = 0
+\end{array}
+\right.
+\end{aligned}
+\end{equation}
+El número de infectivos en la primera semana, I(0) = 14, es un
+valor promedio basado en series históricas de la enfermedad,
+cedidas por el Centro Nacional de Epidemiología.\\
+La forma de la función de vacunación V(t) se ha definido 
+considerando el impacto de la vacunación en la reducción del
+número de susceptibles. Se ha tenido en cuenta el número de
+individuos que han sido vacunados de manera efectiva, es decir,
+aquellos que han experimentado los efectos positivos de la vacuna
+según su eficacia. La vacunación se ha incorporado gradualmente utilizando
+ una función definida por intervalos con el siguiente formato:
 
 \begin{equation}
 \hspace{-28em}
@@ -191,13 +244,31 @@ V(t)=
 \end{aligned}
 \end{equation}
 
+Donde V  representa el número de vacunados semanalmente, aquí tomamos
+el tiempo medido en semanas y el período epidemiológico de estudio es el
+año epidemiológico de la gripe(52 semanas).
+Recalcar aquí que en el intervalo donde V(t) no es nula no coincide
+ con el asociado a la campaña de vacunación (octubre y
+noviembre), sino que está diferido 2 semanas, que es el tiempo
+medio que tarda la vacuna en producir la inmunidad del individuo
+vacunado. La cantidad de individuos vacunados cada semana se calcula como:\\
+
+$V = \frac{Nv\epsilon}{9}$
+
+donde v  y $\epsilon$ son el índice per cápita de vacunación(cobertura vacunal) e índice
+per cápita de la eficacia de la vacuna respectivamente.
+Realmente la vacunación actúa haciendo que parte de
+los individuos que eran susceptibles pasen a ser resistentes, y con
+ello se reduce la posibilidad de contagio al decaer el número de
+contactos entre susceptibles e infectivos, esto se refleja en la figura 4
+
+
 
 \subsection[short]{M\'etodos y algoritmos utilizados}
 
 Para corroborar los resultados mostrados en este paper,
 se us\'o el m\'etodo de Runge-Kutta de 4to orden (RK4)
-teniendo en cuenta la siguiente tabla de par\'ametros iniciales
-
+teniendo en cuenta la siguiente tabla de par\'ametros iniciales:
 
 
 \begin{table}[htbp]
@@ -220,18 +291,32 @@ teniendo en cuenta la siguiente tabla de par\'ametros iniciales
   \end{tabular}
 \end{table}
 
+Estos resultados se muestran en la figura 1 y figura 2 donde se simula
+el comportamiento tanto si se realiza la vacunación como si no, llegando
+a los mismos resultados vistos en el paper analizado
 
 \begin{figure}
 	\centering
 	\includegraphics[width=1.0\textwidth,height=5cm]{Figure_1.png}
 	\caption{Gráficas en función del tiempo si se realiza la vacunación}
+
 	\centering
 	\includegraphics[width=1.0\textwidth,height=5cm]{Figure_2.png}
 	\caption{Gráficas en función del tiempo si no se realiza la vacunación}\centering
-	\includegraphics[width=1.0\textwidth,height=5cm]{fig3.jpg}
-	\caption{Diagrama de Fases }
-
   \end{figure}
+
+\newpage
+
+\begin{figure}
+	\includegraphics[width=1.0\textwidth]{fig3.jpg}
+	\caption{Diagrama de Fases }
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.0\textwidth,height=5cm]{fig4.jpg}
+	\caption{Dinámica epidémica de la enfermedad.}
+\end{figure}
 
 
 
