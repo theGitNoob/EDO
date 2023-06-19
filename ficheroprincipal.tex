@@ -99,7 +99,7 @@
 \WSCpagesetup{Acosta, Valles, Pirchardo, de la Torre, and Barcenas }
 
 % AUTHOR: Enter the title, all letters in upper case
-\title{T\'itulo}
+\title{\'ANALISIS DEL MODELO PARA LA EVALUACI\'ON ECON\'OMICA}
 
 % AUTHOR: Enter the authors of the article, see end of the example document for further examples
 \author{Rafael Acosta M\'arquez\\[12pt]
@@ -142,7 +142,9 @@ Grupo C211\\
 \newpage
 
 \section*{Resumen}
-Aqu\'i va el resumen del trabajo en esta plantilla  \LaTeX\ 
+En este trabajo se realizo un an\'alisis experimental de los resultados fundamentales
+del art\'iculo Modelo para la evaluaci\'on Econ\'omica, se llevaron a cabo comprobaciones 
+de los c\'alculos mediante la programaci\'on de un RK4 , se demostr\'o la estabilidad del sistema, se realizaron y mostr\'o el diagrama de fase lo cual corrobor\'o los resultados acerca de la estabilidad.\\
 
 \section{INTRODUCCI\'ON}
 El presente art\'iculo, escrito por Roberto Pradas Velasco, Fernando Antoñanzas Villar, Javier Mar, fue publicado en a revista Gaceta Sanitaria en el año 2009. 
@@ -157,8 +159,13 @@ proyectar el impacto epidemiol\'ogico de la vacunaci\'on antigripal. Nosotros re
 al sistema en los distintos instantes de tiempo $t \in [1,52] $
 \label{sec:intro}
 
-\section{Resultados fundamentales}
 \subsection{Estructura del trabajo}
+El art\'iculo esta estructurado de la siguiente manera: en primer lugar se tiene un resumen de dicho art\'iculo, procede una introducci\'on donde se expone la problem\'atica 
+a analizar. Luego viene la secci\'on Material y M\'etodos en la cual se muestran los datos que se tienen sobre el problema y los m\'etodos que se utlizaron en la resoluci\'on 
+del mismo. Vendr\'ia despu\'es la secci\'on de los Resultados donde, valga la redundancia, se exponen los resultados de utilizar los m\'etodos para resolver el problema, esto 
+es relevado por la secci\'on de la Discusi\'on, donde se analizan dichos resultados y se sacan conclusiones. Por \'ultimo est\'a la bibliograf\'ia.
+
+\section{Resultados fundamentales}
 Dado que el objetivo de el paper analizdo es presentar de forma guiada la
 construcción de un modelo dinámico, cuyo funcionamiento y resultados se ilustrarán mediante una aplicación a la evaluación
 económica de la vacunación antigripal en España, en este art\'iculo simularemos los pasos
@@ -274,7 +281,7 @@ teniendo en cuenta la siguiente tabla de par\'ametros iniciales:
 \begin{table}[htbp]
   \centering
   \caption{Valores iniciales usados en la simulación}
-  \label{tabla-ejemplo}
+%   \label{tabla-ejemplo}
   \begin{tabular}{|c|c|c|}
     \hline
     \textbf{Párametro} & \textbf{Valor} \\
@@ -297,20 +304,18 @@ a los mismos resultados vistos en el paper analizado
 
 \begin{figure}
 	\centering
-	\includegraphics[width=1.0\textwidth,height=5cm]{Figure_1.png}
+	\includegraphics[width=1.0\textwidth]{Figure_1.png}
 	\caption{Gráficas en función del tiempo si se realiza la vacunación}
-
-	\centering
-	\includegraphics[width=1.0\textwidth,height=5cm]{Figure_2.png}
-	\caption{Gráficas en función del tiempo si no se realiza la vacunación}\centering
-  \end{figure}
-
-\newpage
+\end{figure}
 
 \begin{figure}
-	\includegraphics[width=1.0\textwidth]{fig3.jpg}
-	\caption{Diagrama de Fases }
+	\centering
+	\centering
+	\includegraphics[width=1.0\textwidth]{Figure_2.png}
+	\caption{Gráficas en función del tiempo si no se realiza la vacunación}\centering
 \end{figure}
+
+\newpage
 
 \begin{figure}
 	\centering
@@ -318,12 +323,71 @@ a los mismos resultados vistos en el paper analizado
 	\caption{Dinámica epidémica de la enfermedad.}
 \end{figure}
 
+% \clearpage
+\subsection{Linealizaci\'on y Estabilidad}
+El sistema $(1)$ al tratar de ser resuelto para el vector solución nulo arroja como condición necesaria y suficiente
+que la función I(t) sea nula y que $t>19$.
 
+Por otra parte la matriz jacobiana del sistema viene dada por la expresión:
+
+\begin{equation}
+\begin{aligned}
+\begin{pmatrix}
+f_S(S_0,I_0,R_0) & f_I(S_0,I_0,R_0) & f_R(S_0,I_0,R_0)\\
+g_S(S_0,I_0,R_0) & g_I(S_0,I_0,R_0) & g_R(S_0,I_0,R_0)\\
+h_S(S_0,I_0,R_0) & h_I(S_0,I_0,R_0) & h_R(S_0,I_0,R_0)\\
+\end{pmatrix}
+\end{aligned}
+\end{equation}
+
+
+Y sus valores son:
+
+\begin{equation}
+\begin{aligned}
+\begin{pmatrix}
+	$0$ & $3.05$ & $0$\\
+	
+	$0$ & $-0.41$ & $0$\\
+	
+	$0$ & $3.47$ & $0$\\
+\end{pmatrix}
+\end{aligned}
+\end{equation}
+
+Esta matriz se convierte en una matriz de coeficientes para el sistema linealizado
+$X'=J*x$ donde $X'$ es el vector compuesto por las funciones $u_1', u_2', u_3'$ tal que 
+$u_1 = S(t)- S_0$, $u_2 = I(t)-I_0$ y $u_3 = R(t)- R_0$, $X$ es la transpuesta del vector compuesto por 
+las funciones $u_1, u_2, u_3$ y el punto $(S_0,I_0,R_0)$ es el punto de equilibrio analizado.\\
+
+Los valores propios del Jacobiano evaluados en el punto de equilibrio son: 0, 0 y -0.4171
+por lo cual podemos concluir que el punto de equilibrio en cuesti\'on es un nodo estable ya que
+los ceros no aportan informaci\'on y al ser el resto de los valores, en este caso uno, negativos
+se confirma la estabilidad de dicho nodo.
+
+\begin{figure}[h!]
+	\includegraphics[width=1.0\textwidth]{fig3.jpg}
+	\caption{Diagrama de Fases }
+\end{figure}
 
 
 \clearpage
-\section*{Agradecimientos}
+\section*{Conclusiones}
+El ánalisis del artículo nos permitió conocer formas de aplicación de modelos SIR para la resolución
+de problemas de la vida real como pueden ser las epidemias, y como a tr\'aves de dichos modelos
+se puede hacer un esbozo a futuro del comportamiento de una epidemia teniendo en cuenta
+a trav\'es de \'arboles de decisi\'on las distintas maneras en que se puede ver afectada una 
+poblaci\'on por medidas como la vacunaci\'on. Adem\'as resulta interesante
+poder apreciar el impacto econ\'omico en el sistema santiario debido a los gastos que producen el enfrentamiento
+de una epidemia y el proceso de vacunaci\'on.\\
+Se considera que como una forma de avance en esta l\'inea de investigaci\'on se tendr\'ia que modificar el modelo
+de forma que se tenga en cuenta que los resistentes pueden volver a ser susceptibles y considerar que la vacunaci\'on 
+tiene distintas etapas.\\
 
+\section*{REFERENCIAS}
+https://www.gacetasanitaria.org/es-uno-coma-uno-siete-dos-tenemos-factor-articulo-S0213911110001743
+https://www.gacetasanitaria.org/es-gaceta-sanitaria-2022-maximo-factor-articulo-S0213911123000092
+Ecuaciones Diferenciales y problemas con valores en la Frontera. C/'omputo y Modelado. Cuarta Edici/'on. Aut: C. Henry Edwards, David E. Penney
 
 \appendix
 
